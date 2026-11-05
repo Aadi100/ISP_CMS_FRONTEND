@@ -30,6 +30,11 @@ const resellerMenu = [
   { icon: "LifeBuoy", pathname: "/support", title: "Support" },
 ];
 
+// Customer logins (profiles.subscriber_id) only get this.
+const customerMenu = [
+  { icon: "User", pathname: "/customer-portal", title: "My Account" },
+];
+
 const platformOwnerMenu = [
   { icon: "Home", pathname: "/platform-owner", title: "Dashboard" },
   { icon: "Building2", pathname: "/platform-owner/organizations", title: "ISPs / Organizations" },
@@ -70,7 +75,8 @@ const sideMenu = atom({
     ispMenu,
     platformOwnerMenu,
     resellerMenu,
+    customerMenu,
   },
 });
 
-export { sideMenu, ispMenu, platformOwnerMenu, resellerMenu, routeModules };
+export { sideMenu, ispMenu, platformOwnerMenu, resellerMenu, customerMenu, routeModules };

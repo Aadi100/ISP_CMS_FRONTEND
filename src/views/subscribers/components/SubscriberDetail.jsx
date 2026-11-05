@@ -53,7 +53,7 @@ const BADGE = {
   refunded: "bg-danger/20 text-danger",
 };
 
-function Badge({ value }) {
+export function Badge({ value }) {
   return (
     <span
       className={classnames(
@@ -76,7 +76,7 @@ function Field({ label, children }) {
 }
 
 /** Loads rows for one tab when it is first shown. */
-function useTabData(loader, deps) {
+export function useTabData(loader, deps) {
   const [rows, setRows] = useState(null);
   const [error, setError] = useState("");
   const reload = useCallback(async () => {
@@ -96,7 +96,7 @@ function useTabData(loader, deps) {
   return { rows, error, reload };
 }
 
-function TableShell({ state, empty, headers, children }) {
+export function TableShell({ state, empty, headers, children }) {
   if (state.error)
     return (
       <div className="alert alert-danger show flex items-center">
@@ -131,7 +131,7 @@ function TableShell({ state, empty, headers, children }) {
   );
 }
 
-function InvoicesTab({ sub }) {
+export function InvoicesTab({ sub }) {
   const [open, setOpen] = useState(null);
   const state = useTabData(async () => {
     const { data, error } = await supabase
@@ -210,7 +210,7 @@ function InvoicesTab({ sub }) {
   );
 }
 
-function PaymentsTab({ sub }) {
+export function PaymentsTab({ sub }) {
   const state = useTabData(async () => {
     const { data, error } = await supabase
       .from("v_payment_ledger")
@@ -257,7 +257,7 @@ function PaymentsTab({ sub }) {
   );
 }
 
-function InventoryTab({ sub }) {
+export function InventoryTab({ sub }) {
   const history = useTabData(async () => {
     const { data, error } = await supabase
       .from("v_subscriber_inventory_history")
@@ -331,7 +331,7 @@ function InventoryTab({ sub }) {
   );
 }
 
-function TicketsTab({ sub }) {
+export function TicketsTab({ sub }) {
   const state = useTabData(async () => {
     const { data, error } = await supabase
       .from("v_ticket_overview")
@@ -364,7 +364,7 @@ function TicketsTab({ sub }) {
   );
 }
 
-function DocumentsTab({ sub, session }) {
+export function DocumentsTab({ sub, session }) {
   const [docType, setDocType] = useState("cnic_front");
   const [file, setFile] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -511,7 +511,7 @@ function DocumentsTab({ sub, session }) {
   );
 }
 
-function OverviewTab({ sub, session, onChanged }) {
+export function OverviewTab({ sub, session, onChanged }) {
   const [collector, setCollector] = useState("");
   useEffect(() => {
     (async () => {
@@ -637,6 +637,14 @@ function SubscriberDetail({ subscriber, session, onClose, onEdit, onChanged }) {
             </div>
           </div>
           <div className="ml-auto flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={() => navigate(`/subscribers/${subscriber.id}`)}
+            >
+              <Lucide icon="ExternalLink" className="w-4 h-4 mr-2" />
+              Open full profile
+            </button>
             {canEdit && (
               <button type="button" className="btn btn-outline-secondary" onClick={() => onEdit(subscriber)}>
                 <Lucide icon="Pencil" className="w-4 h-4 mr-2" />

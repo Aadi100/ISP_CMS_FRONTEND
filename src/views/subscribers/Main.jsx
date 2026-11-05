@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Lucide, Tippy } from "@/base-components";
+import { Link } from "react-router-dom";
 import classnames from "classnames";
 import { supabase } from "@/lib/supabase";
 import { getSession, can } from "@/lib/session";
@@ -706,6 +707,12 @@ function Main() {
                                 className="w-4 h-4 text-slate-500 hover:text-primary"
                               />
                             </Tippy>
+                            <Link to={`/subscribers/${sub.id}`} title="Open full profile">
+                              <Lucide
+                                icon="ExternalLink"
+                                className="w-4 h-4 text-slate-500 hover:text-primary"
+                              />
+                            </Link>
                             {canEdit && (
                               <Tippy
                                 tag="button"

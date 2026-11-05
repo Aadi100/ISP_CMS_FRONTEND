@@ -37,7 +37,7 @@ const BILLING_FIELDS = [
   "currency", "installation_charges", "reconnect_charges",
   "reconnect_fee_auto", "auto_suspend", "suspension_days", "allow_upgrade", "allow_downgrade",
 ];
-const PAYMENT_FIELDS = ["payment_methods", "payment_confirmation_required", "receipt_auto_generation"];
+const PAYMENT_FIELDS = ["payment_methods", "payment_confirmation_required", "receipt_auto_generation", "payment_instructions"];
 const EMAIL_FIELDS = ["sender_name", "reply_to", "sender_email"];
 const NOTIF_FIELDS = ["notifications"];
 const SECURITY_FIELDS = [
@@ -476,6 +476,16 @@ function Main() {
                   />
                 ))}
               </div>
+            </Field>
+            <Field span="col-span-12" label="How customers pay (shown to customers in their portal under 'How to pay')">
+              <textarea
+                className="form-control box w-full"
+                rows={4}
+                disabled={!canEdit}
+                value={st.payment_instructions ?? ""}
+                onChange={(e) => setS("payment_instructions", e.target.value)}
+                placeholder="Pay at our office, to our collector, or by bank transfer / JazzCash / Easypaisa to account ... Send the receipt on WhatsApp ..."
+              ></textarea>
             </Field>
             <Field label="Payment Confirmation Required">
               <Toggle disabled={!canEdit} checked={st.payment_confirmation_required} onChange={(v) => setS("payment_confirmation_required", v)} label={st.payment_confirmation_required ? "Required" : "Not Required"} />

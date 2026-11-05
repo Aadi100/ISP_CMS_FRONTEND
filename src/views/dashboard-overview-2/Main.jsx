@@ -8,6 +8,15 @@ import { getSession, can } from "@/lib/session";
 import { friendlyError } from "@/lib/errors";
 import { money, formatDate, titleCase } from "@/lib/format";
 import DataChart from "@/views/reports/components/DataChart";
+import { MoneyToday, LeadsWidget } from "./components/MoneyLeads";
+import {
+  SlaWidget,
+  FieldCollectionWidget,
+  ApprovalsWidget,
+  PurchasingWidget,
+  OutagesWidget,
+  SubscriptionWidget,
+} from "./components/OpsWidgets";
 
 const STATUS_TONE = {
   active: "text-success",
@@ -304,6 +313,24 @@ function Main() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {session && (
+        <div className="col-span-12 mt-6">
+          <div className="intro-y flex items-center h-10">
+            <h2 className="text-lg font-medium truncate mr-5">Operations</h2>
+          </div>
+          <div className="grid grid-cols-12 gap-6 mt-2">
+            <MoneyToday session={session} />
+            <LeadsWidget session={session} />
+            <SlaWidget session={session} />
+            <FieldCollectionWidget session={session} />
+            <ApprovalsWidget session={session} />
+            <PurchasingWidget session={session} />
+            <OutagesWidget session={session} />
+            <SubscriptionWidget session={session} />
           </div>
         </div>
       )}

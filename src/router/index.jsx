@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { getPublicSettings, subscribePublicSettings } from "@/lib/platform";
 import { getMySubscription, subscribeSubscription } from "@/lib/subscription";
 import { Link } from "react-router-dom";
-import { getResellerId } from "@/lib/portal";
+import { getPortalContext } from "@/lib/portal";
 import { getSession, clearSession, can } from "@/lib/session";
 import { ispMenu, routeModules } from "@/stores/side-menu";
 
@@ -49,6 +49,8 @@ import Leads from "../views/leads/Main";
 import HR from "../views/hr/Main";
 import Purchasing from "../views/purchasing/Main";
 import ResellerPortal from "../views/reseller-portal/Main";
+import CustomerPortal from "../views/customer-portal/Main";
+import SubscriberProfile from "../views/subscriber-profile/Main";
 import UpdateProfile from "../views/update-profile/Main";
 import ChangePassword from "../views/change-password/Main";
 
@@ -80,7 +82,7 @@ function ProtectedRoute({ children }) {
   const [session, setSession] = useState(null);
   const [maintenance, setMaintenance] = useState(false);
   const [sub, setSub] = useState(null);
-  const [resellerId, setResellerId] = useState(undefined);
+  const [portal, setPortal] = useState(undefined);
 
   useEffect(() => {
     let mounted = true;
@@ -99,7 +101,7 @@ function ProtectedRoute({ children }) {
         setLoading(false);
       }
       if (s && s.role !== "platform_admin") {
-        getResellerId().then((r) => mounted && setResellerId(r));
+        getPortalContext().then((r) => mounted && setPortal(r));
         getMySubscription().then((x) => mounted && setSub(x));
       }
     });
@@ -174,14 +176,14 @@ function ProtectedRoute({ children }) {
 
   const withBanners = (el) => (
     <>
-      <SubscriptionBanners sub={sub} isAdmin={session.role === "isp_admin"} />
+      {portal && !portal.resellerId && !portal.subscriberId && <SubscriptionBanners sub={sub} isAdmin={session.role === "isp_admin"} />}
       {el}
     </>
   );
 
   if (ALWAYS_ALLOWED.includes(path)) return withBanners(children);
 
-  if (resellerId === undefined) {
+  if (portal === undefined) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-slate-500">Loading...</div>
@@ -190,7 +192,17 @@ function ProtectedRoute({ children }) {
   }
 
   // Reseller logins: only their portal and support.
-  if (resellerId) {
+  // Customer logins: only their own portal.
+  if (portal.subscriberId) {
+    if (path === "/customer-portal") return children;
+    return <Navigate to="/customer-portal" replace />;
+  }
+  if (path === "/customer-portal") {
+    const target = portal.resellerId ? "/reseller-portal" : firstAllowedPath(session);
+    return target ? <Navigate to={target} replace /> : <NoAccess />;
+  }
+
+  if (portal.resellerId) {
     if (path === "/reseller-portal" || path === "/support") return withBanners(children);
     return <Navigate to="/reseller-portal" replace />;
   }
@@ -199,7 +211,7 @@ function ProtectedRoute({ children }) {
     return target ? <Navigate to={target} replace /> : <NoAccess />;
   }
 
-  const module = routeModules[path];
+  const module = routeModules[path] || (/^\/subscribers\/[^/]+$/.test(path) ? "subscribers" : undefined);
   if (module && !can(session, module, "view")) {
     const target = firstAllowedPath(session);
     return target ? <Navigate to={target} replace /> : <NoAccess />;
@@ -446,6 +458,8 @@ function Router() {
         { path: "hr", element: <HR /> },
         { path: "purchasing", element: <Purchasing /> },
         { path: "reseller-portal", element: <ResellerPortal /> },
+        { path: "customer-portal", element: <CustomerPortal /> },
+        { path: "subscribers/:id", element: <SubscriberProfile /> },
 
         {
           path: "update-profile",

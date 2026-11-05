@@ -11,6 +11,8 @@ import {
   DropdownDivider,
 } from "@/base-components";
 import logoUrl from "@/assets/images/logo.svg";
+import AlertsBell from "./AlertsBell";
+import { getPortalContext } from "@/lib/portal";
 import { supabase } from "@/lib/supabase";
 import { getSession, clearSession, can } from "@/lib/session";
 import { ispMenu, platformOwnerMenu } from "@/stores/side-menu";
@@ -25,6 +27,7 @@ function Main(props) {
   const [loggingOut, setLoggingOut] = useState(false);
   const [session, setSession] = useState(null);
   const [orgName, setOrgName] = useState("");
+  const [portal, setPortal] = useState({ resellerId: null, subscriberId: null });
 
   useEffect(() => {
     let alive = true;
@@ -32,6 +35,10 @@ function Main(props) {
       const s = await getSession();
       if (!alive) return;
       setSession(s);
+      if (s && s.role !== "platform_admin") {
+        const ctx = await getPortalContext();
+        if (alive) setPortal(ctx);
+      }
       if (s?.orgId) {
         const { data } = await supabase
           .from("organizations")
@@ -46,6 +53,8 @@ function Main(props) {
     };
   }, []);
 
+  const isCustomer = !!portal.subscriberId;
+  const isReseller = !!portal.resellerId;
   const isOwner = session?.role === "platform_admin";
   const pages = (isOwner
     ? platformOwnerMenu
@@ -131,6 +140,7 @@ function Main(props) {
           {/* END: Breadcrumb */}
 
           {/* BEGIN: Search */}
+          {!isCustomer && (
           <div className="intro-x relative mr-3 sm:mr-6">
             <div className="search hidden sm:block">
               <input
@@ -200,36 +210,11 @@ function Main(props) {
               </div>
             </div>
           </div>
-          {/* END: Search */}
+          )}
+          )}
 
           {/* BEGIN: Notifications */}
-          <Dropdown className="intro-x mr-4 sm:mr-6">
-            <DropdownToggle
-              tag="div"
-              role="button"
-              className="notification cursor-pointer"
-            >
-              <Lucide
-                icon="Bell"
-                className="notification__icon dark:text-slate-500"
-              />
-            </DropdownToggle>
-
-            <DropdownMenu className="notification-content pt-2">
-              <DropdownContent
-                tag="div"
-                className="notification-content__box"
-              >
-                <div className="notification-content__title">
-                  Notifications
-                </div>
-
-                <div className="text-slate-500 text-sm py-4">
-                  No new notifications.
-                </div>
-              </DropdownContent>
-            </DropdownMenu>
-          </Dropdown>
+          {!isCustomer && !isReseller && <AlertsBell />}
           {/* END: Notifications */}
 
           {/* BEGIN: Account Menu */}
