@@ -167,7 +167,7 @@ function Main() {
               <StatCard icon="AlertTriangle" tone="text-danger" value={`${overdue.length} / ${money(sum(overdue, "balance_due"))}`} label="Overdue invoices / amount" />
             </div>
             <div className="col-span-12 sm:col-span-6 xl:col-span-4 intro-y">
-              <StatCard icon="CalendarClock" tone="text-warning" value={money(sum(promisedFuture, "balance_due"))} label="Promised to pay" hint={`${promisedFuture.length} invoices with a future promise date`} />
+              <StatCard icon="Clock" tone="text-warning" value={money(sum(promisedFuture, "balance_due"))} label="Promised to pay" hint={`${promisedFuture.length} invoices with a future promise date`} />
             </div>
             <div className="col-span-12 sm:col-span-6 xl:col-span-4 intro-y">
               <StatCard icon="PiggyBank" tone="text-success" value={money(creditTotal)} label="Advance credit held" hint={`${creditCount} subscribers`} />

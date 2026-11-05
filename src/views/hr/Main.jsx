@@ -11,7 +11,7 @@ import ScheduleTab from "./components/ScheduleTab";
 import { useEmployees } from "./components/common";
 
 const TABS = [
-  { key: "attendance", label: "Attendance", icon: "CalendarCheck" },
+  { key: "attendance", label: "Attendance", icon: "Calendar" },
   { key: "leave", label: "Leave", icon: "Plane" },
   { key: "advances", label: "Advances", icon: "Wallet" },
   { key: "payroll", label: "Payroll", icon: "Banknote" },

@@ -223,7 +223,7 @@ function Main() {
     { show: allow("subscribers"), label: "Active Subscribers", value: v(sub.active), sub: `${v(sub.total)} total, ${v(sub.new_this_month)} new this month`, icon: "Users", color: "text-primary" },
     { show: allow("subscribers"), label: "Pending / Suspended", value: `${v(sub.pending)} / ${v(sub.suspended)}`, icon: "Clock", color: "text-warning" },
     { show: allow("payments"), label: "Collected Today", value: m(col.today), sub: `${m(col.this_month)} this month`, icon: "Wallet", color: "text-success" },
-    { show: allow("billing"), label: "Billed This Month", value: m(bill.billed_this_month), icon: "Receipt", color: "text-primary" },
+    { show: allow("billing"), label: "Billed This Month", value: m(bill.billed_this_month), icon: "FileText", color: "text-primary" },
     { show: allow("billing"), label: "Outstanding", value: m(bill.outstanding_total), sub: `${v(bill.overdue_count)} overdue, ${v(bill.unpaid_count)} unpaid/partial`, icon: "CreditCard", color: "text-danger" },
     { show: allow("billing"), label: "Advance Credit Held", value: m(bill.advance_credit_held), sub: `${v(bill.promised_count)} promised to pay`, icon: "PiggyBank", color: "text-success" },
     { show: allow("tickets"), label: "Open Tickets", value: v(tk.open), sub: `${v(tk.critical_open)} critical, ${v(tk.resolved_today)} resolved today`, icon: "LifeBuoy", color: "text-danger" },

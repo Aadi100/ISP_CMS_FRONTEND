@@ -2,20 +2,12 @@ import { createElement } from "react";
 import * as lucideIcons from "lucide-react";
 import PropTypes from "prop-types";
 
+// An unknown icon name must never take the whole app down: warn and draw a plain circle instead.
 function Lucide(props) {
-  try {
-    const { icon, className, ...computedProps } = props;
-    if (lucideIcons[props.icon] !== undefined) {
-      return createElement(lucideIcons[props.icon], {
-        ...computedProps,
-        className: `lucide ${props.className}`,
-      });
-    } else {
-      throw props.icon;
-    }
-  } catch (err) {
-    throw `Lucide icon '${props.icon}' not found.`;
-  }
+  const { icon, className, ...computedProps } = props;
+  const Icon = lucideIcons[icon] || lucideIcons.Circle;
+  if (!lucideIcons[icon]) console.warn(`Lucide icon '${icon}' not found.`);
+  return createElement(Icon, { ...computedProps, className: `lucide ${className}` });
 }
 
 Lucide.propTypes = {

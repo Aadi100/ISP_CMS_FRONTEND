@@ -79,7 +79,7 @@ function Outstanding({ filters, canExport }) {
             <Stat icon="Clock" color="text-warning" label="Invoices past due" value={d.pastDue.length.toLocaleString()} />
           </div>
           <div className="col-span-12 sm:col-span-4">
-            <Stat icon="CalendarCheck" color="text-primary" label="Promised to pay" value={d.promised.length.toLocaleString()} />
+            <Stat icon="Calendar" color="text-primary" label="Promised to pay" value={d.promised.length.toLocaleString()} />
           </div>
 
           <div className="col-span-12 lg:col-span-5">

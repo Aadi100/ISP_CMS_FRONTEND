@@ -42,7 +42,7 @@ function Revenue({ filters, canExport }) {
             <Stat icon="FileText" label="Invoices" value={d.invoices.toLocaleString()} />
           </div>
           <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-            <Stat icon="Receipt" label="Billed" value={money(d.billed)} />
+            <Stat icon="FileText" label="Billed" value={money(d.billed)} />
           </div>
           <div className="col-span-12 sm:col-span-6 lg:col-span-3">
             <Stat icon="Wallet" color="text-success" label="Collected against invoices" value={money(d.collected)} />
